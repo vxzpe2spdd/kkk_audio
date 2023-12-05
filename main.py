@@ -185,6 +185,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
 
     response = urllib.request.urlopen("https://i1.sndcdn.com/avatars-000389125830-pz2jps-t500x500.jpg");
     imagedata = response.read();
+    file_non_tagged.tag.images = None;
     file_non_tagged.tag.images.set(3, imagedata, "image/jpeg", u"cover");
 
     file_non_tagged.tag.save();
