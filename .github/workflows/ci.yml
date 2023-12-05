@@ -1,6 +1,10 @@
 name: Linux.
 
-on: [push]
+on:
+  push:
+  schedule:
+    # Runs at 7 am and 3 pm UTC every day.
+    - cron: '0 7,15 * * *'
 
 jobs:
   linux:
