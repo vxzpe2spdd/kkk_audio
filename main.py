@@ -11,8 +11,9 @@ from collections import namedtuple
 
 import eyed3
 
-import ffprobe3
 import ffmpeg
+
+from mutagen.mp3 import MP3
 
 from yt_dlp import YoutubeDL
 from yt_dlp.utils import DownloadError
@@ -44,11 +45,9 @@ def remove_silence(filename, output):
     return output;
 
 def duration_seconds(filename):
-    ffprobe_output = ffprobe3.probe(filename)
-    media_format = ffprobe_output.format
-    if media_format.duration_secs is not None:
-        return int(media_format.duration_secs);
-    return int(0);
+    audio = MP3(filename);
+    audio_info = audio.info;
+    return int(audio_info.length);
 
 def read_last_messages():
     captions = list();
