@@ -21,8 +21,8 @@ jobs:
           SECURE_PASS: ${{ secrets.SECURE_PASS }}
 
         run: |
-          pip install pyrogram feedparser wget eyed3
-          pip install ffprobe-python ffmpeg-python yt-dlp
+          pip3 install pyrogram feedparser wget eyed3 tgcrypto
+          pip3 install ffprobe-python ffmpeg-python yt-dlp
 
           wget -O secure.7z $SECURE_URL
           7z x secure.7z -p$SECURE_PASS
