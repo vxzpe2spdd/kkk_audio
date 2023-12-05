@@ -160,9 +160,20 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
         title = f's0{season}e{episode_str}';
 
     nice_name = f'{artist_name} — {title}.mp3';
-    file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
     temp_name = 'out.mp3';
-    run_ffmpeg(file_name, cut_start_str, temp_name);
+    if type(url) is list and line(url) == 2:
+        u1 = url[0];
+        u2 = url[1];
+        f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
+        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
+        temp1 = 'out1.mp3';
+        temp2 = 'out2.mp3';
+        run_ffmpeg(f1, cut_start_str, temp1);
+        run_ffmpeg(f2, '00:00', temp2);
+        os.system(f'{ffmpeg_exec} -f concat -i list_to_concat.txt -c copy {temp_name}');
+    else:
+        file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
+        run_ffmpeg(file_name, cut_start_str, temp_name);
     # trim_audio(file_name, cut_start_str);
     # temp_name = remove_silence(file_name, "temp" + file_name);
 
@@ -233,14 +244,22 @@ def check_is_video_good(videoId):
           return False;
     return False;
 
+# download_tag_upload(
+#     # 'https://vk.com/video-72495291_456239592', # Test.
+#     'https://vk.com/video-72495291_456239518',
+#     'Сценарий к фильму',
+#     '13.12.2016',
+#     2,
+#     1,
+#     '02:15');
+
 download_tag_upload(
-    # 'https://vk.com/video-72495291_456239592', # Test.
-    'https://vk.com/video-72495291_456239518',
-    'Сценарий к фильму',
-    '13.12.2016',
+    ['https://vk.com/video-72495291_456239538', 'https://vk.com/video-72495291_456239539'],
+    'Щячло снова на экране',
+    '17.12.2016',
     2,
-    1,
-    '02:15');
+    2,
+    '03:10');
 
 # yt_entries = find_not_uploaded(read_last_messages());
 # for yt_entry in reversed(yt_entries):
