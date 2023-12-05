@@ -97,6 +97,20 @@ def download_single(videoId):
         ydl.download(videoId)
         return f'{videoId}.mp3'
 
+def download_single_vk(url):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': 'vk.mp4',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '128',
+        }],
+    }
+    with YoutubeDL(ydl_opts) as ydl:
+        ydl.download(videoId)
+        return 'vk.mp3'
+
 def download_last_tagged_audio():
     filename = "tagged_audio.mp3";
     if os.path.isfile(filename):
@@ -115,19 +129,29 @@ def extract_cover(filename):
                 fp.write(img.image_data)
                 return file_cover;
 
-def download_tag_upload(url, title, date_str):
+def download_tag_upload(url, title, date_str, season, episode):
+    episode_str = "{:03d}".format(episode);
+    if (len(title) > 0):
+        title = f'{title} s0{season}e{episode_str}';
+    else:
+        title = f's0{season}e{episode_str}';
+
     nice_name = f'{artist_name} — {title}.mp3';
-    file_name = download_single(url);
+    file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
     temp_name = remove_silence(file_name, "temp" + file_name);
 
     timestamp = time.mktime(datetime.datetime.strptime(date_str, "%d/%m/%Y").timetuple());
     os.utime(temp_name, (int(timestamp), int(timestamp)))
     os.rename(temp_name, file_name);
 
+    total_in_season = 0;
+    if (season == 2):
+        total_in_season = 71
+
     file_non_tagged = eyed3.load(file_name);
     file_non_tagged.tag = eyed3.load(download_last_tagged_audio()).tag;
-    file_non_tagged.tag._setDiscNum(2); # Season 2.
-    file_non_tagged.tag._setTrackNum((1, 71)); # Total 71.
+    file_non_tagged.tag._setDiscNum(season);
+    file_non_tagged.tag._setTrackNum((episode, total_in_season));
     file_non_tagged.tag._setTitle(title);
     file_non_tagged.tag._setArtist(artist_name);
     file_non_tagged.tag._setGenre('Podcast');
@@ -182,7 +206,9 @@ def check_is_video_good(videoId):
 download_tag_upload(
     'https://vk.com/video-72495291_456239518',
     'Сценарий к фильму',
-    '13.12.2016');
+    '13.12.2016',
+    2,
+    1);
 
 # yt_entries = find_not_uploaded(read_last_messages());
 # for yt_entry in reversed(yt_entries):
