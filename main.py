@@ -47,7 +47,7 @@ def duration_seconds(filename):
     temp_name = 'temp_name_.mp3';
     os.rename(filename, temp_name);
     result = int(0);
-    for stream in FFProbe(filename).streams:
+    for stream in FFProbe(temp_name).streams:
         seconds = stream.duration_seconds();
         if (seconds > 0):
             result = int(seconds);
