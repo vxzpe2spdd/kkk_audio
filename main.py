@@ -18,12 +18,17 @@ from mutagen.mp3 import MP3
 from yt_dlp import YoutubeDL
 from yt_dlp.utils import DownloadError
 
+import urllib.request
+
+import time
+import datetime
+
 YtEntry = namedtuple("YtEntry", "videoId title");
 
-chat_target = sys.argv[1:][0]
+chat_target = "kkk_old"
 youtube_channel_id=sys.argv[1:][1]
 rss_url=sys.argv[1:][2]
-artist_name=sys.argv[1:][3]
+artist_name="Константин Кадавр"
 API_ID=int(sys.argv[1:][4])
 API_HASH=sys.argv[1:][5]
 app = Client("my_account", API_ID, API_HASH)
@@ -35,6 +40,7 @@ def remove_silence(filename, output):
     bundle = (
         ffmpeg
         .input(filename)
+        .trim(start=0, end=((2 * 60 + 15) * 1000))
         .output(output, af=f'silenceremove={silence_args}')
     )
 
@@ -109,16 +115,29 @@ def extract_cover(filename):
                 fp.write(img.image_data)
                 return file_cover;
 
-def download_tag_upload(yt_entry):
-    nice_name = f'{artist_name} — {yt_entry.title}.mp3';
-    file_name = download_single(yt_entry.videoId);
+def download_tag_upload(url, title, date_str):
+    nice_name = f'{artist_name} — {title}.mp3';
+    file_name = download_single(url);
     temp_name = remove_silence(file_name, "temp" + file_name);
+
+    timestamp = time.mktime(datetime.datetime.strptime(date_str, "%d/%m/%Y").timetuple());
+    os.utime(temp_name, (int(timestamp), int(timestamp)))
     os.rename(temp_name, file_name);
 
     file_non_tagged = eyed3.load(file_name);
     file_non_tagged.tag = eyed3.load(download_last_tagged_audio()).tag;
-    file_non_tagged.tag._setTrackNum((0, 0));
-    file_non_tagged.tag.title = yt_entry.title;
+    file_non_tagged.tag._setDiscNum(2); # Season 2.
+    file_non_tagged.tag._setTrackNum((1, 71)); # Total 71.
+    file_non_tagged.tag._setTitle(title);
+    file_non_tagged.tag._setArtist(artist_name);
+    file_non_tagged.tag._setGenre('Podcast');
+    file_non_tagged.tag._setAlbum('Подкаст Константина Кадавра');
+    file_non_tagged.tag._setRecordingDate(date_str);
+
+    response = urllib.request.urlopen("https://i1.sndcdn.com/avatars-000389125830-pz2jps-t500x500.jpg");
+    imagedata = response.read();
+    file_non_tagged.tag.images.set(3, imagedata, "image/jpeg", u"cover");
+
     file_non_tagged.tag.save();
 
     cover_file_name = extract_cover(file_name);
@@ -126,7 +145,6 @@ def download_tag_upload(yt_entry):
 
     print("Uploading...");
     print(f'audio file = {nice_name}');
-    print('caption = '+f'youtu.be/{yt_entry.videoId}');
     print(f'duration = {time_secs}');
     print(f'performer = {file_non_tagged.tag.artist}');
     print(f'title = {file_non_tagged.tag.title}');
@@ -138,7 +156,7 @@ def download_tag_upload(yt_entry):
         app.send_audio(
             chat_id=chat_target,
             audio=nice_name,
-            caption=f'youtu.be/{yt_entry.videoId}',
+            caption=f'{date_str}.',
             duration=time_secs,
             performer=file_non_tagged.tag.artist,
             title=file_non_tagged.tag.title,
@@ -161,7 +179,12 @@ def check_is_video_good(videoId):
           return False;
     return False;
 
-yt_entries = find_not_uploaded(read_last_messages());
-for yt_entry in reversed(yt_entries):
-    if check_is_video_good(yt_entry.videoId):
-        download_tag_upload(yt_entry);
+download_tag_upload(
+    'https://vk.com/video-72495291_456239518',
+    'Сценарий к фильму',
+    '13.12.2016');
+
+# yt_entries = find_not_uploaded(read_last_messages());
+# for yt_entry in reversed(yt_entries):
+#     if check_is_video_good(yt_entry.videoId):
+#         download_tag_upload(yt_entry);
