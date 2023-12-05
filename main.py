@@ -11,7 +11,7 @@ from collections import namedtuple
 
 import eyed3
 
-from ffprobe import FFProbe
+import ffprobe3
 import ffmpeg
 
 from yt_dlp import YoutubeDL
