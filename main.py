@@ -149,7 +149,7 @@ def run_ffmpeg(filename, cut_start_str, out):
     print(ffmpeg_exec);
     silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
     silence = '-af "silenceremove={silence_args}"';
-    cmd = '{ffmpeg_exec} -i {filename} -b:a 128K -vn {silence} -ss {cut_start_str} {out}';
+    cmd = f'{ffmpeg_exec} -i {filename} -b:a 128K -vn {silence} -ss {cut_start_str} {out}';
     os.system(cmd);
 
 def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
