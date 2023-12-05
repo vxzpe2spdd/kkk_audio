@@ -20,7 +20,7 @@ jobs:
           python3 -m pip install git+https://github.com/KurimuzonAkuma/pyrogram
 
           python3 -m pip install feedparser wget eyed3 tgcrypto
-          python3 -m pip install ffmpeg-python yt-dlp mutagen
+          python3 -m pip install ffmpeg-python yt-dlp mutagen pydub
 
       - name: Process.
         env:

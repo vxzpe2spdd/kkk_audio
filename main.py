@@ -23,6 +23,8 @@ import urllib.request
 import time
 import datetime
 
+from pydub import AudioSegment
+
 YtEntry = namedtuple("YtEntry", "videoId title");
 
 chat_target = "kkk_old"
@@ -42,14 +44,20 @@ def dur_str_to_secs(t):
         m, s = map(int, list);
         return m * 60 + s;
 
-def remove_silence(filename, output, cut_start_str):
+def trim_audio(filename, cut_start_str):
+    temp_name = 'temp' + filename;
+    os.rename(filename, temp_name);
+    song = AudioSegment.from_mp3(temp_name);
+    ms = dur_str_to_secs(cut_start_str) * 1000;
+    song[:ms].export(filename, format="mp3");
+
+def remove_silence(filename, output):
     # Trim all silence encountered from beginning to end where there is more than 1 second of silence in audio:
     # silenceremove=stop_periods=-1:stop_duration=1:stop_threshold=-90dB
     silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
-    in_file = ffmpeg.input(filename);
     (
         ffmpeg
-        .concat(in_file.trim(start=0, end=dur_str_to_secs(cut_start_str)))
+        .input(filename)
         .output(output, af=f'silenceremove={silence_args}')
         .run()
     )
@@ -147,6 +155,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
 
     nice_name = f'{artist_name} — {title}.mp3';
     file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
+    trim_audio(file_name, cut_start_str);
     temp_name = remove_silence(file_name, "temp" + file_name, cut_start_str);
 
     timestamp = time.mktime(datetime.datetime.strptime(date_str, "%d/%m/%Y").timetuple());
