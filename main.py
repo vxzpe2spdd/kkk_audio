@@ -52,7 +52,7 @@ def trim_audio(filename, cut_start_str):
     os.rename(filename, temp_name);
     song = AudioSegment.from_mp3(temp_name);
     ms = dur_str_to_secs(cut_start_str) * 1000;
-    song[:ms].export(filename, format="mp3");
+    song[ms:].export(filename, format="mp3");
 
 def remove_silence(filename, output):
     # Trim all silence encountered from beginning to end where there is more than 1 second of silence in audio:
