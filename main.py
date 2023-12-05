@@ -33,14 +33,23 @@ API_ID=int(sys.argv[1:][4])
 API_HASH=sys.argv[1:][5]
 app = Client("my_account", API_ID, API_HASH)
 
-def remove_silence(filename, output):
+def dur_str_to_secs(t):
+    list = t.split(':');
+    if (len(list) == 3):
+        h, m, s = map(int, list);
+        return h * 3600 + m * 60 + s;
+    else:
+        m, s = map(int, list);
+        return m * 60 + s;
+
+def remove_silence(filename, output, cut_start_str):
     # Trim all silence encountered from beginning to end where there is more than 1 second of silence in audio:
     # silenceremove=stop_periods=-1:stop_duration=1:stop_threshold=-90dB
     silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
     bundle = (
         ffmpeg
         .input(filename)
-        .trim(start=0, end=((2 * 60 + 15) * 1000))
+        .trim(start=0, end=dur_str_to_secs(cut_start_str))
         .output(output, af=f'silenceremove={silence_args}')
     )
 
@@ -129,7 +138,7 @@ def extract_cover(filename):
                 fp.write(img.image_data)
                 return file_cover;
 
-def download_tag_upload(url, title, date_str, season, episode):
+def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     episode_str = "{:03d}".format(episode);
     if (len(title) > 0):
         title = f'{title} s0{season}e{episode_str}';
@@ -138,7 +147,7 @@ def download_tag_upload(url, title, date_str, season, episode):
 
     nice_name = f'{artist_name} — {title}.mp3';
     file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
-    temp_name = remove_silence(file_name, "temp" + file_name);
+    temp_name = remove_silence(file_name, "temp" + file_name, cut_start_str);
 
     timestamp = time.mktime(datetime.datetime.strptime(date_str, "%d/%m/%Y").timetuple());
     os.utime(temp_name, (int(timestamp), int(timestamp)))
@@ -204,11 +213,13 @@ def check_is_video_good(videoId):
     return False;
 
 download_tag_upload(
-    'https://vk.com/video-72495291_456239518',
+    'https://vk.com/video-72495291_456239592', # Test.
+    # 'https://vk.com/video-72495291_456239518',
     'Сценарий к фильму',
     '13.12.2016',
     2,
-    1);
+    1,
+    '02:15');
 
 # yt_entries = find_not_uploaded(read_last_messages());
 # for yt_entry in reversed(yt_entries):
