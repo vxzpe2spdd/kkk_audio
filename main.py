@@ -161,7 +161,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
 
     nice_name = f'{artist_name} — {title}.mp3';
     temp_name = 'out.mp3';
-    if type(url) is list and line(url) == 2:
+    if type(url) is list and len(url) == 2:
         u1 = url[0];
         u2 = url[1];
         f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
