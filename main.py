@@ -108,7 +108,7 @@ def download_single_vk(url):
         }],
     }
     with YoutubeDL(ydl_opts) as ydl:
-        ydl.download(videoId)
+        ydl.download(url)
         return 'vk.mp3'
 
 def download_last_tagged_audio():
