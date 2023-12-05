@@ -29,12 +29,9 @@ API_HASH=sys.argv[1:][5]
 app = Client("my_account", API_ID, API_HASH)
 
 def remove_silence(filename, output):
-    silence_args = 'start_periods=0:' \
-        'start_duration=0:' \
-        'start_threshold=0:' \
-        'stop_periods=-1:' \
-        'stop_duration=5:' \
-        'stop_threshold=-50dB';
+    # Trim all silence encountered from beginning to end where there is more than 1 second of silence in audio:
+    # silenceremove=stop_periods=-1:stop_duration=1:stop_threshold=-90dB
+    silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
     bundle = (
         ffmpeg
         .input(filename)
