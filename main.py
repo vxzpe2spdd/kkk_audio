@@ -170,7 +170,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
         total_in_season = 71
 
     file_non_tagged = eyed3.load(file_name);
-    file_non_tagged.tag = eyed3.load(download_last_tagged_audio()).tag;
+    # file_non_tagged.tag = eyed3.load(download_last_tagged_audio()).tag;
     file_non_tagged.tag._setDiscNum(season);
     file_non_tagged.tag._setTrackNum((episode, total_in_season));
     file_non_tagged.tag._setTitle(title);
@@ -185,7 +185,6 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
 
     response = urllib.request.urlopen("https://i1.sndcdn.com/avatars-000389125830-pz2jps-t500x500.jpg");
     imagedata = response.read();
-    file_non_tagged.tag.images = None;
     file_non_tagged.tag.images.set(3, imagedata, "image/jpeg", u"cover");
 
     file_non_tagged.tag.save();
