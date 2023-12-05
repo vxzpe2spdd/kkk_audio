@@ -156,7 +156,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     nice_name = f'{artist_name} — {title}.mp3';
     file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
     trim_audio(file_name, cut_start_str);
-    temp_name = remove_silence(file_name, "temp" + file_name, cut_start_str);
+    temp_name = remove_silence(file_name, "temp" + file_name);
 
     timestamp = time.mktime(datetime.datetime.strptime(date_str, "%d/%m/%Y").timetuple());
     os.utime(temp_name, (int(timestamp), int(timestamp)))
