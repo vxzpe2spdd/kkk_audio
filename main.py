@@ -46,14 +46,12 @@ def remove_silence(filename, output, cut_start_str):
     # Trim all silence encountered from beginning to end where there is more than 1 second of silence in audio:
     # silenceremove=stop_periods=-1:stop_duration=1:stop_threshold=-90dB
     silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
-    bundle = (
-        ffmpeg
-        .input(filename)
-        .trim(start=0, end=dur_str_to_secs(cut_start_str))
-        .output(output, af=f'silenceremove={silence_args}')
-    )
+    in_file = ffmpeg.input(filename);
+    ffmpeg
+    .concat(in_file.trim(start=0, end=dur_str_to_secs(cut_start_str)))
+    .output(output, af=f'silenceremove={silence_args}')
+    .run();
 
-    ffmpeg.run(bundle);
     return output;
 
 def duration_seconds(filename):
