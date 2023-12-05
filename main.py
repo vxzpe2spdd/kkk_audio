@@ -148,7 +148,7 @@ def extract_cover(filename):
 def run_ffmpeg(filename, cut_start_str, out):
     print(ffmpeg_exec);
     silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
-    silence = '-af "silenceremove={silence_args}"';
+    silence = f'-af "silenceremove={silence_args}"';
     cmd = f'{ffmpeg_exec} -i {filename} -b:a 128K -vn {silence} -ss {cut_start_str} {out}';
     os.system(cmd);
 
