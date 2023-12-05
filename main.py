@@ -149,6 +149,12 @@ def extract_cover(filename):
                 fp.write(img.image_data)
                 return file_cover;
 
+def run_ffmpeg(filename, cut_start_str, out):
+    silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
+    silence = '-af "silenceremove={silence_args}"';
+    cmd = 'ffmpeg -i {filename} -b:a 128K -vn {silence} -ss {cut_start_str} {out}';
+    os.system(cmd);
+
 def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     episode_str = "{:03d}".format(episode);
     if (len(title) > 0):
@@ -158,8 +164,10 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
 
     nice_name = f'{artist_name} — {title}.mp3';
     file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
-    trim_audio(file_name, cut_start_str);
-    temp_name = remove_silence(file_name, "temp" + file_name);
+    temp_name = 'out.mp3';
+    run_ffmpeg(file_name, cut_start_str, temp_name);
+    # trim_audio(file_name, cut_start_str);
+    # temp_name = remove_silence(file_name, "temp" + file_name);
 
     timestamp = time.mktime(time.strptime(date_str, MY_FORMAT))
     os.utime(temp_name, (int(timestamp), int(timestamp)))
@@ -229,8 +237,8 @@ def check_is_video_good(videoId):
     return False;
 
 download_tag_upload(
-    # 'https://vk.com/video-72495291_456239592', # Test.
-    'https://vk.com/video-72495291_456239518',
+    'https://vk.com/video-72495291_456239592', # Test.
+    # 'https://vk.com/video-72495291_456239518',
     'Сценарий к фильму',
     '13.12.2016',
     2,
