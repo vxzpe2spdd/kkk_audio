@@ -46,7 +46,7 @@ def remove_silence(filename, output):
 def duration_seconds(filename):
     result = int(0);
     for stream in ffprobe3.probe(filename).streams:
-        seconds = stream.duration_seconds();
+        seconds = stream.duration_secs();
         if (seconds > 0):
             result = int(seconds);
             break;
