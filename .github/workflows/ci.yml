@@ -21,7 +21,7 @@ jobs:
           SECURE_PASS: ${{ secrets.SECURE_PASS }}
 
         run: |
-          sudo apt-get install ffmpeg ffprobe
+          sudo apt-get update && sudo apt-get install ffmpeg
 
           python3 -m pip install pyrogram feedparser wget eyed3 tgcrypto
           python3 -m pip install ffprobe-python ffmpeg-python yt-dlp
