@@ -35,6 +35,8 @@ API_ID=int(sys.argv[1:][4])
 API_HASH=sys.argv[1:][5]
 app = Client("my_account", API_ID, API_HASH)
 
+MY_FORMAT = '%d.%m.%Y';
+
 def dur_str_to_secs(t):
     list = t.split(':');
     if (len(list) == 3):
@@ -158,7 +160,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     trim_audio(file_name, cut_start_str);
     temp_name = remove_silence(file_name, "temp" + file_name);
 
-    timestamp = time.mktime(time.strptime(date_str, "%d.%m.%Y"))
+    timestamp = time.mktime(time.strptime(date_str, MY_FORMAT))
     os.utime(temp_name, (int(timestamp), int(timestamp)))
     os.rename(temp_name, file_name);
 
@@ -174,7 +176,8 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     file_non_tagged.tag._setArtist(artist_name);
     file_non_tagged.tag._setGenre('Podcast');
     file_non_tagged.tag._setAlbum('Подкаст Константина Кадавра');
-    file_non_tagged.tag._setRecordingDate(date_str);
+    file_non_tagged.tag._setRecordingDate(
+        datetime.datetime.strptime(date_str, MY_FORMAT).strftime('"%Y-%m-%d"'));
 
     response = urllib.request.urlopen("https://i1.sndcdn.com/avatars-000389125830-pz2jps-t500x500.jpg");
     imagedata = response.read();
