@@ -10,7 +10,7 @@ import sys
 from collections import namedtuple
 
 import eyed3
-from eyed3.core import eyed3Date
+from eyed3.core import Date as eyed3Date
 
 import ffmpeg
 
