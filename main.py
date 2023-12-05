@@ -28,7 +28,12 @@ API_HASH=sys.argv[1:][5]
 app = Client("my_account", API_ID, API_HASH)
 
 def remove_silence(filename, output):
-    silence_args = '1:5:-45dB';
+    silence_args = 'start_periods=0:' \
+        'start_duration=0:' \
+        'start_threshold=0:' \
+        'stop_periods=-1:' \
+        'stop_duration=5:' \
+        'stop_threshold=-50dB';
     bundle = (
         ffmpeg
         .input(filename)
@@ -39,13 +44,11 @@ def remove_silence(filename, output):
     return output;
 
 def duration_seconds(filename):
-    result = int(0);
-    for stream in ffprobe3.probe(filename).streams:
-        seconds = stream.duration_secs;
-        if (seconds > 0):
-            result = int(seconds);
-            break;
-    return result;
+    ffprobe_output = ffprobe3.probe(filename)
+    media_format = ffprobe_output.format
+    if media_format.duration_secs is not None:
+        return int(media_format.duration_secs);
+    return int(0);
 
 def read_last_messages():
     captions = list();
