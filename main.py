@@ -44,15 +44,12 @@ def remove_silence(filename, output):
     return output;
 
 def duration_seconds(filename):
-    temp_name = 'temp_name_.mp3';
-    os.rename(filename, temp_name);
     result = int(0);
-    for stream in FFProbe(temp_name).streams:
+    for stream in ffprobe3.probe(filename).streams:
         seconds = stream.duration_seconds();
         if (seconds > 0):
             result = int(seconds);
             break;
-    os.rename(temp_name, filename);
     return result;
 
 def read_last_messages():
@@ -120,15 +117,18 @@ def extract_cover(filename):
 
 def download_tag_upload(yt_entry):
     nice_name = f'{artist_name} — {yt_entry.title}.mp3';
-    file_name = remove_silence(download_single(yt_entry.videoId), nice_name)
+    file_name = download_single(yt_entry.videoId);
+    temp_name = remove_silence(file_name, "temp" + file_name);
+    os.rename(temp_name, file_name);
+
     file_non_tagged = eyed3.load(file_name);
     file_non_tagged.tag = eyed3.load(download_last_tagged_audio()).tag;
     file_non_tagged.tag._setTrackNum((0, 0));
     file_non_tagged.tag.title = yt_entry.title;
     file_non_tagged.tag.save();
 
-    cover_file_name = extract_cover(nice_name);
-    time_secs = duration_seconds(nice_name);
+    cover_file_name = extract_cover(file_name);
+    time_secs = duration_seconds(file_name);
 
     print("Uploading...");
     print(f'audio file = {nice_name}');
@@ -137,6 +137,8 @@ def download_tag_upload(yt_entry):
     print(f'performer = {file_non_tagged.tag.artist}');
     print(f'title = {file_non_tagged.tag.title}');
     print(f'cover_file_name = {cover_file_name}');
+
+    os.rename(file_name, nice_name);
 
     with app:
         app.send_audio(
