@@ -158,7 +158,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     trim_audio(file_name, cut_start_str);
     temp_name = remove_silence(file_name, "temp" + file_name);
 
-    timestamp = time.mktime(datetime.datetime.strptime(date_str, "%d.%m.%Y").timetuple());
+    timestamp = time.mktime(time.strptime(date_str, "%d.%m.%Y"))
     os.utime(temp_name, (int(timestamp), int(timestamp)))
     os.rename(temp_name, file_name);
 
