@@ -40,7 +40,7 @@ def remove_silence(filename, output):
         .output(output, af=f'silenceremove={silence_args}')
     )
 
-    bundle.execute()
+    ffmpeg.run(bundle);
     return output;
 
 def duration_seconds(filename):
