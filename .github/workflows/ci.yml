@@ -43,4 +43,5 @@ jobs:
             $rss_url \
             "$artist_name" \
             $API_ID \
-            $API_HASH
+            $API_HASH \
+            `which ffmpeg`

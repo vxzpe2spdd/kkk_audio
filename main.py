@@ -32,6 +32,7 @@ chat_target = "kkk_old"
 youtube_channel_id=sys.argv[1:][1]
 rss_url=sys.argv[1:][2]
 artist_name="Константин Кадавр"
+ffmpeg_exec = sys.argv[1:][6]
 API_ID=int(sys.argv[1:][4])
 API_HASH=sys.argv[1:][5]
 app = Client("my_account", API_ID, API_HASH)
@@ -121,15 +122,10 @@ def download_single_vk(url):
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': 'vk.mp4',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '128',
-        }],
     }
     with YoutubeDL(ydl_opts) as ydl:
         ydl.download(url)
-        return 'vk.mp3'
+        return 'vk.mp4'
 
 def download_last_tagged_audio():
     filename = "tagged_audio.mp3";
@@ -150,9 +146,10 @@ def extract_cover(filename):
                 return file_cover;
 
 def run_ffmpeg(filename, cut_start_str, out):
+    print(ffmpeg_exec);
     silence_args = 'stop_periods=-1:stop_duration=3:stop_threshold=-90dB';
     silence = '-af "silenceremove={silence_args}"';
-    cmd = 'ffmpeg -i {filename} -b:a 128K -vn {silence} -ss {cut_start_str} {out}';
+    cmd = '{ffmpeg_exec} -i {filename} -b:a 128K -vn {silence} -ss {cut_start_str} {out}';
     os.system(cmd);
 
 def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
