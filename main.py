@@ -229,8 +229,8 @@ def check_is_video_good(videoId):
     return False;
 
 download_tag_upload(
-    'https://vk.com/video-72495291_456239592', # Test.
-    # 'https://vk.com/video-72495291_456239518',
+    # 'https://vk.com/video-72495291_456239592', # Test.
+    'https://vk.com/video-72495291_456239518',
     'Сценарий к фильму',
     '13.12.2016',
     2,
