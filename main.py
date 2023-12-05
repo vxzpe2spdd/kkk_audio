@@ -162,6 +162,6 @@ def check_is_video_good(videoId):
     return False;
 
 yt_entries = find_not_uploaded(read_last_messages());
-for yt_entry in yt_entries:
+for yt_entry in reversed(yt_entries):
     if check_is_video_good(yt_entry.videoId):
         download_tag_upload(yt_entry);
