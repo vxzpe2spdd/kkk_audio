@@ -44,11 +44,16 @@ def remove_silence(filename, output):
     return output;
 
 def duration_seconds(filename):
+    temp_name = 'temp_name_.mp3';
+    os.rename(filename, temp_name);
+    result = int(0);
     for stream in FFProbe(filename).streams:
         seconds = stream.duration_seconds();
         if (seconds > 0):
-            return int(seconds);
-    return int(0);
+            result = int(seconds);
+            break;
+    os.rename(temp_name, filename);
+    return result;
 
 def read_last_messages():
     captions = list();
