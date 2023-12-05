@@ -51,7 +51,7 @@ def remove_silence(filename, output, cut_start_str):
         ffmpeg
         .concat(in_file.trim(start=0, end=dur_str_to_secs(cut_start_str)))
         .output(output, af=f'silenceremove={silence_args}')
-        .run();
+        .run()
     )
 
     return output;
