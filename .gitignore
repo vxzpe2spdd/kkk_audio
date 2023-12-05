@@ -1,0 +1,11 @@
+/bin/
+/include/
+/lib/
+/share/
+*.mp3
+*.jpg
+.DS_Store
+ffmpeg
+*.session
+*.cfg
+*.txt
