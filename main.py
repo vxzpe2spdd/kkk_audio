@@ -45,7 +45,7 @@ def dur_str_to_secs(t):
         return m * 60 + s;
 
 def trim_audio(filename, cut_start_str):
-    temp_name = 'temp' + filename;
+    temp_name = 'AudioSegment_temp_' + filename;
     os.rename(filename, temp_name);
     song = AudioSegment.from_mp3(temp_name);
     ms = dur_str_to_secs(cut_start_str) * 1000;
