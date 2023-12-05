@@ -177,7 +177,10 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     file_non_tagged.tag._setGenre('Podcast');
     file_non_tagged.tag._setAlbum('Подкаст Константина Кадавра');
     file_non_tagged.tag._setRecordingDate(
-        datetime.datetime.strptime(date_str, MY_FORMAT).strftime('"%Y-%m-%d"'));
+        core.Date(
+            year=datetime.datetime.strptime(date_str, MY_FORMAT).year,
+            month=datetime.datetime.strptime(date_str, MY_FORMAT).month,
+            day=datetime.datetime.strptime(date_str, MY_FORMAT).day));
 
     response = urllib.request.urlopen("https://i1.sndcdn.com/avatars-000389125830-pz2jps-t500x500.jpg");
     imagedata = response.read();
