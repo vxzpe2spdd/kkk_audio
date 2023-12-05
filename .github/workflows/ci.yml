@@ -1,0 +1,36 @@
+name: Linux.
+
+on: [push]
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3.1.0
+
+      - name: Process.
+        env:
+          chat_target: ${{ secrets.chat_target }}
+          youtube_channel_id: ${{ secrets.youtube_channel_id }}
+          rss_url: ${{ secrets.rss_url }}
+          artist_name: ${{ secrets.artist_name }}
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          SECURE_URL: ${{ secrets.SECURE_URL }}
+          SECURE_PASS: ${{ secrets.SECURE_PASS }}
+
+        run: |
+          pip install pyrogram feedparser wget eyed3
+          pip install ffprobe-python ffmpeg-python yt-dlp
+
+          wget -O secure.7z $SECURE_URL
+          7z x secure.7z -p$SECURE_PASS
+
+          python3 main.py \
+            $chat_target \
+            $youtube_channel_id \
+            $rss_url \
+            "$artist_name" \
+            $API_ID \
+            $API_HASH
