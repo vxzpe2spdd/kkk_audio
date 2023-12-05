@@ -18,10 +18,9 @@ jobs:
           sudo apt-get update && sudo apt-get install ffmpeg
 
           python3 -m pip install git+https://github.com/KurimuzonAkuma/pyrogram
-          python3 -m pip install git+https://github.com/jboy/ffprobe3-python3
 
           python3 -m pip install feedparser wget eyed3 tgcrypto
-          python3 -m pip install ffmpeg-python yt-dlp
+          python3 -m pip install ffmpeg-python yt-dlp mutagen
 
       - name: Process.
         env:
