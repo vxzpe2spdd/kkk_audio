@@ -11,9 +11,8 @@ from collections import namedtuple
 
 import eyed3
 
-from ffmpeg import FFmpeg
-from ffmpeg.ffmpeg import FFmpeg
 from ffprobe import FFProbe
+import FFmpeg
 
 from yt_dlp import YoutubeDL
 from yt_dlp.utils import DownloadError
