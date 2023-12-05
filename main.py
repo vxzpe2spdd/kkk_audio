@@ -10,6 +10,7 @@ import sys
 from collections import namedtuple
 
 import eyed3
+from eyed3.core import eyed3Date
 
 import ffmpeg
 
@@ -177,7 +178,7 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
     file_non_tagged.tag._setGenre('Podcast');
     file_non_tagged.tag._setAlbum('Подкаст Константина Кадавра');
     file_non_tagged.tag._setRecordingDate(
-        eyed3.Date(
+        eyed3Date(
             year=datetime.datetime.strptime(date_str, MY_FORMAT).year,
             month=datetime.datetime.strptime(date_str, MY_FORMAT).month,
             day=datetime.datetime.strptime(date_str, MY_FORMAT).day));
