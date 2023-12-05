@@ -35,7 +35,7 @@ def remove_silence(filename, output):
         'stop_duration=5:' \
         'stop_threshold=-45dB';
     bundle = (
-        ffmpeg.FFmpeg()
+        ffmpeg._ffmpeg()
         .option("y")
         .input(filename)
         .output(output, af=f'silenceremove={silence_args}')
