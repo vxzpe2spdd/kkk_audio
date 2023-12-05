@@ -9,6 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3.1.0
 
+      - name: Dependencies.
+        run: |
+          sudo apt-get update && sudo apt-get install ffmpeg
+
+          python3 -m pip install pyrogram feedparser wget eyed3 tgcrypto
+          python3 -m pip install ffprobe-python ffmpeg-python yt-dlp
+
       - name: Process.
         env:
           chat_target: ${{ secrets.chat_target }}
@@ -21,11 +28,6 @@ jobs:
           SECURE_PASS: ${{ secrets.SECURE_PASS }}
 
         run: |
-          sudo apt-get update && sudo apt-get install ffmpeg
-
-          python3 -m pip install pyrogram feedparser wget eyed3 tgcrypto
-          python3 -m pip install ffprobe-python ffmpeg-python yt-dlp
-
           wget -O secure.7z $SECURE_URL
           7z x secure.7z -p$SECURE_PASS
 
