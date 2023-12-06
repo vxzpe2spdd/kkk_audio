@@ -153,11 +153,11 @@ def run_ffmpeg(filename, cut_start_str, out):
     os.system(cmd);
 
 def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
-    episode_str = "{:03d}".format(episode);
-    if (len(title) > 0):
-        title = f'{title} s0{season}e{episode_str}';
-    else:
-        title = f's0{season}e{episode_str}';
+    def nice_title():
+        episode_str = "{:03d}".format(episode);
+        space = ' ' if (len(title) > 0) else '';
+        return f'{title}{space}s0{season}e{episode_str}';
+    title = nice_title();
 
     nice_name = f'{artist_name} — {title}.mp3';
     temp_name = 'out.mp3';
@@ -166,11 +166,34 @@ def download_tag_upload(url, title, date_str, season, episode, cut_start_str):
         u2 = url[1];
         f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
         f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
-        temp1 = 'out1.mp3';
-        temp2 = 'out2.mp3';
-        run_ffmpeg(f1, cut_start_str, temp1);
-        run_ffmpeg(f2, '00:00', temp2);
+        run_ffmpeg(f1, cut_start_str, 'out1.mp3');
+        run_ffmpeg(f2, '00:00', 'out2.mp3');
         os.system(f'{ffmpeg_exec} -f concat -i list_to_concat.txt -c copy {temp_name}');
+    elif type(url) is list and len(url) == 3:
+        u1 = url[0];
+        u2 = url[1];
+        u3 = url[2];
+        f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
+        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
+        f3 = download_single_vk(u3) if ('vk.com' in u3) else download_single(u3);
+        run_ffmpeg(f1, cut_start_str, 'out1.mp3');
+        run_ffmpeg(f2, '00:00', 'out2.mp3');
+        run_ffmpeg(f3, '00:00', 'out3.mp3');
+        os.system(f'{ffmpeg_exec} -f concat -i list_to_concat_three.txt -c copy {temp_name}');
+    elif type(url) is list and len(url) == 4:
+        u1 = url[0];
+        u2 = url[1];
+        u3 = url[2];
+        u4 = url[3];
+        f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
+        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
+        f3 = download_single_vk(u3) if ('vk.com' in u3) else download_single(u3);
+        f4 = download_single_vk(u4) if ('vk.com' in u4) else download_single(u4);
+        run_ffmpeg(f1, cut_start_str, 'out1.mp3');
+        run_ffmpeg(f2, '00:00', 'out2.mp3');
+        run_ffmpeg(f3, '00:00', 'out3.mp3');
+        run_ffmpeg(f4, '00:00', 'out4.mp3');
+        os.system(f'{ffmpeg_exec} -f concat -i list_to_concat_four.txt -c copy {temp_name}');
     else:
         file_name = download_single_vk(url) if ('vk.com' in url) else download_single(url);
         run_ffmpeg(file_name, cut_start_str, temp_name);
@@ -244,14 +267,16 @@ def check_is_video_good(videoId):
           return False;
     return False;
 
-# download_tag_upload(
-#     # 'https://vk.com/video-72495291_456239592', # Test.
-#     'https://vk.com/video-72495291_456239518',
-#     'Сценарий к фильму',
-#     '13.12.2016',
-#     2,
-#     1,
-#     '02:15');
+episode_counter = 1;
+download_tag_upload(
+    # 'https://vk.com/video-72495291_456239592', # Test.
+    'https://vk.com/video-72495291_456239518',
+    'Сценарий к фильму',
+    '13.12.2016',
+    2,
+    episode_counter,
+    '02:15');
+episode_counter = episode_counter + 1;
 
 download_tag_upload(
     ['https://vk.com/video-72495291_456239538', 'https://vk.com/video-72495291_456239539'],
@@ -260,6 +285,92 @@ download_tag_upload(
     2,
     2,
     '03:10');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    ['https://vk.com/video-72495291_456239565', 'https://vk.com/video-72495291_456239564'],
+    'Паром дом дом',
+    '18.12.2016',
+    2,
+    episode_counter,
+    '02:30');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    'https://vk.com/video-72495291_456239569',
+    'Каикакака (КиККК)',
+    '19.12.2016',
+    2,
+    episode_counter,
+    '03:30');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    'https://vk.com/video-72495291_456239577',
+    'Харкотина на еботине',
+    '22.12.2016',
+    2,
+    episode_counter,
+    '04:10');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    [
+        'https://vk.com/video-72495291_456239603',
+        'https://vk.com/video-72495291_456239601',
+        'https://vk.com/video-72495291_456239606'
+    ],
+    'Курдючный жмых',
+    '10.01.2017',
+    2,
+    episode_counter,
+    '02:40');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    ['https://vk.com/video-72495291_456239605', 'https://vk.com/video-72495291_456239604'],
+    'Лилу Даллас Мульти Пасс',
+    '11.01.2017',
+    2,
+    episode_counter,
+    '01:56');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    [
+        'https://vk.com/video-72495291_456239610',
+        'https://vk.com/video-72495291_456239609',
+        'https://vk.com/video-72495291_456239608',
+        'https://vk.com/video-72495291_456239607'
+    ],
+    '(Кузьма) Ускорение горизонтального падения',
+    '12.01.2017',
+    2,
+    episode_counter,
+    '01:27');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    [
+        'https://vk.com/video-72495291_456239613',
+        'https://vk.com/video-72495291_456239612',
+        'https://vk.com/video-72495291_456239611'
+    ],
+    'Последний довод бегемотика',
+    '13.01.2017',
+    2,
+    episode_counter,
+    '08:40');
+episode_counter = episode_counter + 1;
+
+download_tag_upload(
+    'https://vk.com/video-72495291_456239618',
+    'Бертольдт Брехун',
+    '15.01.2017',
+    2,
+    episode_counter,
+    '02:10');
+episode_counter = episode_counter + 1;
 
 # yt_entries = find_not_uploaded(read_last_messages());
 # for yt_entry in reversed(yt_entries):

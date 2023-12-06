@@ -8,4 +8,4 @@
 ffmpeg
 *.session
 *.cfg
-*.txt
+requirements.txt
