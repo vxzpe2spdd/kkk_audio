@@ -257,6 +257,8 @@ def download_tag_upload(urls, title, date_str, season, episode, cut_start_str):
             title=file_non_tagged.tag.title,
             thumb=cover_file_name);
 
+    os.system('rm *.mp3 && rm *.mp4');
+
 def check_is_video_good(videoId):
     with YoutubeDL({ 'quiet': True }) as ydl:
         try:
