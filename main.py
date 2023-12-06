@@ -276,9 +276,9 @@ def second_season(urls, title, date_str, cut_start_str):
         title,
         date_str,
         2,
-        episode_counter,
+        34,
         cut_start_str);
-    episode_counter = episode_counter + 1;
+    # episode_counter = episode_counter + 1;
 
 # second_season(
 #     # ['72495291_456239592'], # Test.
