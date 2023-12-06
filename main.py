@@ -153,15 +153,13 @@ def run_ffmpeg(filename, cut_start_str, out):
     os.system(cmd);
 
 def download_tag_upload(urls, title, date_str, season, episode, cut_start_str):
-    def nice_title():
-        if '2016' in date_str:
-            episode_str = 'XX';
-            episode = 0;
-        else:
-            episode_str = "{:03d}".format(episode);
-        space = ' ' if (len(title) > 0) else '';
-        return f'{title}{space}s0{season}e{episode_str}';
-    title = nice_title();
+    if '2016' in date_str:
+        episode_str = 'XX';
+        episode = 0;
+    else:
+        episode_str = "{:03d}".format(episode);
+    space = ' ' if (len(title) > 0) else '';
+    title = f'{title}{space}s0{season}e{episode_str}';
 
     nice_name = f'{artist_name} — {title}.mp3';
     temp_name = 'out.mp3';
