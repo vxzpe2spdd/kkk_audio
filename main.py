@@ -169,8 +169,8 @@ def download_tag_upload(urls, title, date_str, season, episode, cut_start_str):
         u1 = urls[0];
         u2 = urls[1];
         f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
-        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
         run_ffmpeg(f1, cut_start_str, 'out1.mp3');
+        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
         run_ffmpeg(f2, '00:00', 'out2.mp3');
         os.system(f'{ffmpeg_exec} -f concat -i list_to_concat.txt -c copy {temp_name}');
     elif type(urls) is list and len(urls) == 3:
@@ -178,10 +178,10 @@ def download_tag_upload(urls, title, date_str, season, episode, cut_start_str):
         u2 = urls[1];
         u3 = urls[2];
         f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
-        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
-        f3 = download_single_vk(u3) if ('vk.com' in u3) else download_single(u3);
         run_ffmpeg(f1, cut_start_str, 'out1.mp3');
+        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
         run_ffmpeg(f2, '00:00', 'out2.mp3');
+        f3 = download_single_vk(u3) if ('vk.com' in u3) else download_single(u3);
         run_ffmpeg(f3, '00:00', 'out3.mp3');
         os.system(f'{ffmpeg_exec} -f concat -i list_to_concat_three.txt -c copy {temp_name}');
     elif type(urls) is list and len(urls) == 4:
@@ -190,12 +190,12 @@ def download_tag_upload(urls, title, date_str, season, episode, cut_start_str):
         u3 = urls[2];
         u4 = urls[3];
         f1 = download_single_vk(u1) if ('vk.com' in u1) else download_single(u1);
-        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
-        f3 = download_single_vk(u3) if ('vk.com' in u3) else download_single(u3);
-        f4 = download_single_vk(u4) if ('vk.com' in u4) else download_single(u4);
         run_ffmpeg(f1, cut_start_str, 'out1.mp3');
+        f2 = download_single_vk(u2) if ('vk.com' in u2) else download_single(u2);
         run_ffmpeg(f2, '00:00', 'out2.mp3');
+        f3 = download_single_vk(u3) if ('vk.com' in u3) else download_single(u3);
         run_ffmpeg(f3, '00:00', 'out3.mp3');
+        f4 = download_single_vk(u4) if ('vk.com' in u4) else download_single(u4);
         run_ffmpeg(f4, '00:00', 'out4.mp3');
         os.system(f'{ffmpeg_exec} -f concat -i list_to_concat_four.txt -c copy {temp_name}');
     else:
