@@ -157,7 +157,7 @@ def download_tag_upload(urls, title, date_str, season, episode, cut_start_str):
         if '2016' in date_str:
             episode_str = 'XX';
             episode = 0;
-        else
+        else:
             episode_str = "{:03d}".format(episode);
         space = ' ' if (len(title) > 0) else '';
         return f'{title}{space}s0{season}e{episode_str}';
