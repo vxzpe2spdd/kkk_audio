@@ -1,0 +1,15 @@
+image: ubuntu
+
+stages:
+  - process
+
+process:
+  stage: process
+  script:
+    - apt-get update && apt-get install ffmpeg python3 python3-pip wget p7zip-full git -y
+    - python3 -m pip install git+https://github.com/KurimuzonAkuma/pyrogram
+    - python3 -m pip install feedparser wget eyed3 tgcrypto
+    - python3 -m pip install ffmpeg-python yt-dlp mutagen
+    - wget -O secure.7z $SECURE_URL
+    - 7z x secure.7z -p$SECURE_PASS
+    - python3 main.py $chat_target $youtube_channel_id $rss_url "$artist_name" $API_ID $API_HASH
